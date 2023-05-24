@@ -1,0 +1,88 @@
+
+
+const fs = require('fs');
+const readline = require('readline');
+const { promisify } = require('util');
+const readFile = promisify(fs.readFile);
+
+function printPage(expressions, strprod) {
+  expressions.forEach((expression) => {
+    const rg2 = new RegExp(expression);
+    const matches = strprod.matchAll(rg2);
+    for (const match of matches) {
+      console.log('The product details are:');
+      console.log(match[1]);
+    }
+  });
+}
+
+function nextPage(currentPage, str) {
+  const rg = new RegExp(currentPage);
+  const matches = str.matchAll(rg);
+
+  for (const match of matches) {
+    if (parseInt(match[1]) === 20) {
+      return '';
+    } else {
+      const nextPageRegex = /<a.*?page.([\s\S].)*?/;
+      const matches1 = str.matchAll(nextPageRegex);
+      for (const match1 of matches1) {
+        const cp = parseInt(match1[1]) + 1;
+        const cp1 = cp.toString();
+        return cp1;
+      }
+    }
+  }
+  return '';
+}
+
+async function main() {
+  const str = await readFile('categoryText.txt', 'utf8');
+  const expr = /product-card__wrapper""[\s\S]*?a href.([\s\S]*?).class/g;
+
+  const currentPage = /page=\d">([\s\S])<\/a>/g;
+
+  const rg = new RegExp(expr);
+  const matches = [...str.matchAll(rg)];
+
+  for (const match of matches) {
+    console.log('The link to the product is:');
+    console.log(match[1]);
+  }
+
+  const NEXT = nextPage(currentPage, str);
+  console.log('The next page will be:');
+  console.log(NEXT);
+
+  const strprod = await readFile('prodPage.txt', 'utf8');
+
+  const prodNamexpr = /<h1>([\s\S]*)<\/h1>/g;
+  const prodSerial = /txt">([\s\S]*?)<\/div>/g;
+  const prodDetail = /<h2>([\s\S]*?)<\/h2>/g;
+  const prodImage = /<img style="([\s\S]*?png)"/g;
+  const prodTable = /<table([\s\S]*?)<\/table>/g;
+
+  const expressions = [prodNamexpr, prodSerial, prodDetail, prodImage, prodTable];
+
+  printPage(expressions, strprod);
+}
+
+main().catch((error) => console.error(error));
+
+
+
+
+
+
+
+const str = 'Hello, World!';
+const pattern = /Hello/g;
+
+// Method 1: Using RegExp object
+const regex = new RegExp(pattern);
+console.log(regex.test(str)); // Output: true
+
+// Method 2: Using regular expression pattern directly with string methods
+console.log(str.match(pattern)); // Output: [ 'Hello' ]
+console.log(str.replace(pattern, 'Hi')); // Output: Hi, World!
+console.log(str.split(pattern)); // Output: [ '', ', World!' ]

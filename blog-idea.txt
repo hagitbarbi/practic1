@@ -1,0 +1,15 @@
+ {
+    _id: '60a40cf5da9d76000ccc2828',
+    name: 'Blog Idea & Outline',
+    slug: 'blog-idea-outline',
+    caption: 'Generate ideas and content structure for articles',
+    description: 'The easiest way to come up with catchy blog, essay, and article topics and content structures using AI writing assistant',
+    contextInputs: [ [Object] ],
+    image: '1626880951898.svg',
+    variants: 1,
+    info: '',
+    createdAt: '2021-05-18T18:52:37.355Z',
+    key: 'blog-idea-outline',
+    isCustom: false,
+    isNew: false
+  },
